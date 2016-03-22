@@ -1,6 +1,6 @@
 # VNSqliteDB
 
-[![CI Status](http://img.shields.io/travis/Chungmin Ahn/VNSqliteDB.svg?style=flat)](https://travis-ci.org/Chungmin Ahn/VNSqliteDB)
+[![CI Status](http://img.shields.io/travis/netmaid/VNSqliteDB.svg?style=flat)](https://travis-ci.org/netmaid/VNSqliteDB)
 [![Version](https://img.shields.io/cocoapods/v/VNSqliteDB.svg?style=flat)](http://cocoapods.org/pods/VNSqliteDB)
 [![License](https://img.shields.io/cocoapods/l/VNSqliteDB.svg?style=flat)](http://cocoapods.org/pods/VNSqliteDB/LICENSE)
 [![Platform](https://img.shields.io/cocoapods/p/VNSqliteDB.svg?style=flat)](http://cocoapods.org/pods/VNSqliteDB)
