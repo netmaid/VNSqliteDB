@@ -1,4 +1,6 @@
 language: objective-c
-xcode_project: VNSqliteDB.xcodeproj
-xcode_scheme: VNSqliteDBTests
-xcode_sdk: iphonesimulator
+#xcode_project: VNSqliteDB.xcodeproj
+#xcode_scheme: VNSqliteDBTests
+#xcode_sdk: iphonesimulator
+script:
+  - xctool -project VNSqliteDB.xcodeproj -scheme VNSqliteDBTests -sdk iphonesimulator build-tests 
