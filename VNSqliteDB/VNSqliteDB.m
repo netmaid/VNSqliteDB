@@ -32,6 +32,9 @@
 	sqlite3_stmt*	stmt;
 	NSString*		sql;
 	BOOL			isReference;
+	
+	int					bindIndex;
+	NSMutableArray*		bindMembers;
 }
 - (nullable instancetype)initWithStmt:(sqlite3_stmt*)stmt db:(VNSqliteDB*)db sql:(NSString*)sql;
 @end
@@ -73,6 +76,22 @@
 	[self close];
 	
 	_filePath = filePath;
+	return [self open];
+}
+
+- (BOOL)openInMemoryWithSharedCache:(BOOL)useSharedCache
+{
+	_useInMemory = YES;
+	_useSharedCache = useSharedCache;
+	
+	if (useSharedCache)
+	{
+		_filePath = @"file::memory:";
+	}
+	else
+	{
+		_filePath = @"file::memory:?cache=shared";
+	}
 	return [self open];
 }
 
@@ -292,13 +311,8 @@
 		stmt = stmt_;
 		sql = sql_;
 		isReference = NO;
-	}
-	else
-	{
-		vndb = NULL;
-		stmt = NULL;
-		sql = nil;
-		isReference = NO;
+		bindIndex = 0;
+		bindMembers = [NSMutableArray new];
 	}
 	return self;
 }
@@ -327,6 +341,9 @@
 {
 	if (stmt == NULL)
 		return;
+	
+	bindIndex = 0;
+	[bindMembers removeAllObjects];
 	
 	int r = sqlite3_clear_bindings(stmt);
 	if (r != SQLITE_OK)
@@ -364,67 +381,110 @@
 
 - (BOOL)bind:(nonnull id)val
 {
-	if ([val isMemberOfClass:[NSNumber class]]) {
-		// TODO
+	++bindIndex;
+	
+	if (val == nil)
+	{
+		sqlite3_bind_null(stmt, bindIndex);
+	}
+	else if ([val isMemberOfClass:[NSNumber class]])
+	{
 		NSNumber* number = val;
 		CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
 		switch (numberType)
 		{
 			case kCFNumberSInt8Type:
+				sqlite3_bind_int(stmt, bindIndex, number.charValue);
 				break;
 				
 			case kCFNumberSInt16Type:
+				sqlite3_bind_int(stmt, bindIndex, number.shortValue);
 				break;
 				
 			case kCFNumberSInt32Type:
+				sqlite3_bind_int(stmt, bindIndex, number.intValue);
 				break;
 				
 			case kCFNumberSInt64Type:
+				sqlite3_bind_int64(stmt, bindIndex, number.longLongValue);
 				break;
 				
 			case kCFNumberFloat32Type:
+				sqlite3_bind_double(stmt, bindIndex, number.floatValue);
 				break;
 				
 			case kCFNumberFloatType:
+				sqlite3_bind_double(stmt, bindIndex, number.floatValue);
 				break;
 				
 			case kCFNumberFloat64Type:
+				sqlite3_bind_double(stmt, bindIndex, number.doubleValue);
 				break;
 				
 			case kCFNumberDoubleType:
+				sqlite3_bind_double(stmt, bindIndex, number.doubleValue);
 				break;
 			
 			case kCFNumberCharType:
+				sqlite3_bind_int(stmt, bindIndex, number.charValue);
 				break;
 				
 			case kCFNumberShortType:
+				sqlite3_bind_int(stmt, bindIndex, number.shortValue);
 				break;
 				
 			case kCFNumberIntType:
+				sqlite3_bind_int(stmt, bindIndex, number.intValue);
 				break;
 				
 			case kCFNumberLongType:
+				sqlite3_bind_int64(stmt, bindIndex, number.longValue);
 				break;
 				
 			case kCFNumberLongLongType:
+				sqlite3_bind_int64(stmt, bindIndex, number.longLongValue);
 				break;
 				
-			case kCFNumberCFIndexType:
+			case kCFNumberCFIndexType: // CFIndex type
+				sqlite3_bind_int64(stmt, bindIndex, number.longLongValue);
 				break;
 				
 			case kCFNumberNSIntegerType:
+				sqlite3_bind_int64(stmt, bindIndex, number.integerValue);
 				break;
 				
 			case kCFNumberCGFloatType:
+				sqlite3_bind_double(stmt, bindIndex, number.floatValue);
 				break;
 		}
 	}
-	else if ([val isMemberOfClass:[NSString class]]) {
-		// TODO
-		return YES;
+	else if ([val isMemberOfClass:[NSString class]])
+	{
+		[bindMembers addObject:val];
+		
+		NSString* text = (NSString*) val;
+		const char* cText = [text cStringUsingEncoding:NSASCIIStringEncoding];
+		
+		sqlite3_bind_text(stmt, bindIndex, cText, (int)strlen(cText), NULL);
 	}
-	else if ([val isMemberOfClass:[NSData class]]) {
-		// TODO
+	else if ([val isMemberOfClass:[NSData class]])
+	{
+		[bindMembers addObject:val];
+		
+		NSData* data = (NSData*) val;
+		const void* cData = [data bytes];
+		int dataLen = (int)[data length];
+		
+		sqlite3_bind_blob(stmt, bindIndex, cData, dataLen, 0);
+	}
+	else if ([val isMemberOfClass:[NSDictionary class]])
+	{
+		[bindMembers addObject:val];
+		
+		NSString* json = [self jsonStringFromDictionary:(NSDictionary*)val];
+		const char* Cjson = [json cStringUsingEncoding:NSASCIIStringEncoding];
+		
+		sqlite3_bind_text(stmt, bindIndex, Cjson, (int)strlen(Cjson), 0);
 	}
 	else {
 		NSString* message = [NSString stringWithFormat:@"not supported type %@", NSStringFromClass([val class])];
@@ -434,4 +494,19 @@
 	}
 	return YES;
 }
+
+- (NSString*)jsonStringFromDictionary:(NSDictionary*)dictionary {
+	NSError *error;
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self
+													   options:0
+														 error:&error];
+	if (jsonData == nil) {
+		NSLog(@"jsonStringFromDictionary: error: %@", error.localizedDescription);
+		return @"{}";
+	}
+	else {
+		return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+	}
+}
+
 @end

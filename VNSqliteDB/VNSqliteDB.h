@@ -20,11 +20,12 @@
 
 @property (nonatomic,weak,nullable) id<VNSqliteDBDelegate>  delegate;
 @property (nonatomic,strong,nullable) NSString*             filePath;
-@property (nonatomic,assign) BOOL                           useInMemory; // TODO
-@property (nonatomic,assign) BOOL                           useSharedCache; // TODO
+@property (nonatomic,assign) BOOL                           useInMemory;
+@property (nonatomic,assign) BOOL                           useSharedCache;
 
 - (BOOL)open;
 - (BOOL)openWithFilePath:(nonnull NSString*)filePath;
+- (BOOL)openInMemoryWithSharedCache:(BOOL)useSharedCache;
 - (void)close;
 
 - (BOOL)execute:(nonnull NSString*)sql;
