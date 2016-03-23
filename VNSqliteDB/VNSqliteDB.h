@@ -18,10 +18,10 @@
 
 @interface VNSqliteDB: NSObject
 
-@property (nonatomic,weak) id<VNSqliteDBDelegate>	delegate;
-@property (nonatomic,strong,nullable) NSString*		filePath;
-@property (nonatomic,assign) BOOL					useInMemory;
-@property (nonatomic,assign) BOOL					useSharedCache;
+@property (nonatomic,weak,nullable) id<VNSqliteDBDelegate>  delegate;
+@property (nonatomic,strong,nullable) NSString*             filePath;
+@property (nonatomic,assign) BOOL                           useInMemory; // TODO
+@property (nonatomic,assign) BOOL                           useSharedCache; // TODO
 
 - (BOOL)open;
 - (BOOL)openWithFilePath:(nonnull NSString*)filePath;

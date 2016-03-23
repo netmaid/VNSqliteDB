@@ -154,11 +154,11 @@
 
 - (void)onError:(int)error at:(NSString*)at message:(const char*)message
 {
-	if ([self.delegate respondsToSelector:@selector(didErrorOccured:error:)])
+	if (_delegate && [_delegate respondsToSelector:@selector(didErrorOccured:error:)])
 	{
 		NSString* sMessage = [NSString stringWithUTF8String:message];
 		NSError* sError = [[NSError alloc] initWithDomain:sMessage code:error userInfo:nil];
-		[self.delegate didErrorOccured:self error:sError];
+		[_delegate didErrorOccured:self error:sError];
 	}
 }
 
@@ -248,7 +248,7 @@
 		case SQLITE_INTEGER:
 		{
 			sqlite_int64 val = sqlite3_column_int64(stmt, idx);
-			object = [[NSNumber alloc] initWithLong:val];
+			object = [[NSNumber alloc] initWithLongLong:val];
 			break;
 		}
 			
