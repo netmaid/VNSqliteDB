@@ -11,6 +11,7 @@
 		34D970561CA124000074B2D5 /* VNSqliteDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D970551CA124000074B2D5 /* VNSqliteDB.m */; };
 		34D970631CA1248D0074B2D5 /* PersonDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D970621CA1248D0074B2D5 /* PersonDBTests.m */; };
 		34D970651CA1248D0074B2D5 /* libVNSqliteDB.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34D970501CA124000074B2D5 /* libVNSqliteDB.a */; };
+		34D9706E1CA264FC0074B2D5 /* InMemoryDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D9706D1CA264FC0074B2D5 /* InMemoryDBTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		34D970601CA1248D0074B2D5 /* VNSqliteDBTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VNSqliteDBTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D970621CA1248D0074B2D5 /* PersonDBTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PersonDBTests.m; sourceTree = "<group>"; };
 		34D970641CA1248D0074B2D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34D9706D1CA264FC0074B2D5 /* InMemoryDBTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InMemoryDBTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				34D970621CA1248D0074B2D5 /* PersonDBTests.m */,
+				34D9706D1CA264FC0074B2D5 /* InMemoryDBTests.m */,
 				34D970641CA1248D0074B2D5 /* Info.plist */,
 			);
 			path = VNSqliteDBTests;
@@ -197,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34D970631CA1248D0074B2D5 /* PersonDBTests.m in Sources */,
+				34D9706E1CA264FC0074B2D5 /* InMemoryDBTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +354,7 @@
 				34D9705B1CA124000074B2D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		34D970681CA1248D0074B2D5 /* Build configuration list for PBXNativeTarget "VNSqliteDBTests" */ = {
 			isa = XCConfigurationList;
@@ -358,6 +363,7 @@
 				34D9706A1CA1248D0074B2D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

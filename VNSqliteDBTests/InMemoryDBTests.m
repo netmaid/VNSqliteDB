@@ -1,21 +1,21 @@
 //
-//  PersonDBTests.m
-//  PersonDBTests
+//  InMemoryDBTests.m
+//  VNSqliteDB
 //
-//  Created by ened on 2016. 3. 22..
-//  Copyright © 2016 netmaid. All rights reserved.
+//  Created by ened on 2016. 3. 23..
+//  Copyright © 2016년 netmaid. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
 #import "VNSqliteDB.h"
 
-@interface PersonDBTests : XCTestCase<VNSqliteDBDelegate>
+@interface InMemoryDBTests : XCTestCase<VNSqliteDBDelegate>
 {
 	VNSqliteDB*		db;
 }
 @end
 
-@implementation PersonDBTests
+@implementation InMemoryDBTests
 
 - (void)setUp {
     [super setUp];
@@ -36,18 +36,13 @@
 	const int PERSON_COUNT = 10;
 	
 	
-	// Open database
-	NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString* documentsDirectory = [paths firstObject];
-	NSString* dbPath = [documentsDirectory stringByAppendingString:@"test.db"];
-	
-	XCTAssert( [db openWithFilePath:dbPath] );
-	
+	// Open in-memory database
+	XCTAssert( [db openInMemoryWithSharedCache:NO] );
 	
 	// Create person table
 	NSString* createSql = @"CREATE TABLE IF NOT EXISTS person(idx INTEGER PRIMARY KEY ASC, name TEXT, age INTEGER)";
 	XCTAssert( [db execute:createSql] );
-
+	
 	
 	// Insert person sample data
 	for (int i = 0; i < PERSON_COUNT; i++) {
@@ -62,18 +57,13 @@
 	NSString* countSql = @"SELECT count(idx) FROM person";
 	VNSqliteRecord* record = [db executeForRecord:countSql];
 	XCTAssertNotNil( record );
-
+	
 	if (record) {
 		while ([record next]) {
 			NSNumber* count = record[0];
 			XCTAssert( count.intValue == PERSON_COUNT );
 		}
 	}
-
-	
-	// Destroy person table
-	NSString* dropSql = @"DROP TABLE person";
-	XCTAssert( [db execute:dropSql] );
 }
 
 - (void)testPerformanceExample {

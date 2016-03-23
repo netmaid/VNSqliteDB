@@ -10,6 +10,7 @@
 ## Requirements
 
 - Objective-C
+- Xcode 7.0 or later
 - iOS 6.0 or later
 - Mac OS 10.9 or later
 
