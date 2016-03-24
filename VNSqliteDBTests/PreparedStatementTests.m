@@ -1,21 +1,21 @@
 //
-//  InMemoryDBTests.m
+//  PreparedStatementTests.m
 //  VNSqliteDB
 //
-//  Created by ened on 2016. 3. 23..
+//  Created by ened on 2016. 3. 24..
 //  Copyright © 2016 netmaid. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
 #import "VNSqliteDB.h"
 
-@interface InMemoryDBTests : XCTestCase<VNSqliteDBDelegate>
+@interface PreparedStatementTests : XCTestCase<VNSqliteDBDelegate>
 {
 	VNSqliteDB*		db;
 }
 @end
 
-@implementation InMemoryDBTests
+@implementation PreparedStatementTests
 
 - (void)setUp {
     [super setUp];
@@ -35,33 +35,41 @@
 - (void)testExample {
 	const int PERSON_COUNT = 10;
 	
-	
 	// Open in-memory database
 	XCTAssert( [db openInMemoryWithSharedCache:NO] );
-	
+
 	// Create person table
 	NSString* createSql = @"CREATE TABLE IF NOT EXISTS person(idx INTEGER PRIMARY KEY ASC, name TEXT, age INTEGER)";
 	XCTAssert( [db execute:createSql] );
+
 	
-	
-	// Insert person sample data
-	for (int i = 0; i < PERSON_COUNT; i++) {
-		NSString* name = [NSString stringWithFormat:@"Name%zd", i];
-		int age = rand()%50+1;
-		NSString* query = [NSString stringWithFormat:@"INSERT INTO person(name, age) VALUES ('%@', %zd)", name, age];
-		XCTAssert( [db execute:query] );
+	// Insert person sample data using prepared statement
+	NSString* insertStatement = @"INSERT INTO person(name, age) VALUES (?,?)";
+	VNSqliteStatement* statement = [db prepareForStatement:insertStatement];
+	if (statement) {
+		for (int i = 0; i < PERSON_COUNT; i++) {
+			NSString* name = [NSString stringWithFormat:@"Name%zd", i];
+			int age = rand()%50+1;
+
+			[statement bind:name];
+			[statement bind:[NSNumber numberWithInt:age]];
+			[statement executeAndReset];
+		}
 	}
 	
 	
-	// Count all persons
-	NSString* countSql = @"SELECT count(idx) FROM person";
+	// Get all person's name
+	NSString* countSql = @"SELECT name FROM person ORDER BY idx ASC";
 	VNSqliteRecord* record = [db executeForRecord:countSql];
 	XCTAssertNotNil( record );
 	
 	if (record) {
+		int curIdx = 0;
 		while ([record next]) {
-			NSNumber* count = record[0];
-			XCTAssert( count.intValue == PERSON_COUNT );
+			NSString* name = record[0];
+			NSString* expectName = [NSString stringWithFormat:@"Name%zd", curIdx];
+			XCTAssertEqual( name, expectName );
+			curIdx++;
 		}
 	}
 }

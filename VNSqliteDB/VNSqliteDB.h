@@ -52,6 +52,7 @@
 
 - (void)reset;
 - (BOOL)execute;
+- (BOOL)executeAndReset;
 - (nullable VNSqliteRecord*)executeForRecord;
 
 - (BOOL)bind:(nonnull id)val;

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		345BD8321CA36A5C006BC936 /* PreparedStatementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BD8311CA36A5C006BC936 /* PreparedStatementTests.m */; };
 		34D970541CA124000074B2D5 /* VNSqliteDB.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34D970531CA124000074B2D5 /* VNSqliteDB.h */; };
 		34D970561CA124000074B2D5 /* VNSqliteDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D970551CA124000074B2D5 /* VNSqliteDB.m */; };
 		34D970631CA1248D0074B2D5 /* PersonDBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D970621CA1248D0074B2D5 /* PersonDBTests.m */; };
@@ -38,6 +39,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		345BD8311CA36A5C006BC936 /* PreparedStatementTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreparedStatementTests.m; sourceTree = "<group>"; };
 		34D970501CA124000074B2D5 /* libVNSqliteDB.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libVNSqliteDB.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		34D970531CA124000074B2D5 /* VNSqliteDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VNSqliteDB.h; sourceTree = "<group>"; };
 		34D970551CA124000074B2D5 /* VNSqliteDB.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VNSqliteDB.m; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 			children = (
 				34D970621CA1248D0074B2D5 /* PersonDBTests.m */,
 				34D9706D1CA264FC0074B2D5 /* InMemoryDBTests.m */,
+				345BD8311CA36A5C006BC936 /* PreparedStatementTests.m */,
 				34D970641CA1248D0074B2D5 /* Info.plist */,
 			);
 			path = VNSqliteDBTests;
@@ -201,6 +204,7 @@
 			files = (
 				34D970631CA1248D0074B2D5 /* PersonDBTests.m in Sources */,
 				34D9706E1CA264FC0074B2D5 /* InMemoryDBTests.m in Sources */,
+				345BD8321CA36A5C006BC936 /* PreparedStatementTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

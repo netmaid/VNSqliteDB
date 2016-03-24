@@ -175,7 +175,7 @@
 {
 	if (_delegate && [_delegate respondsToSelector:@selector(didErrorOccured:error:)])
 	{
-		NSString* sMessage = [NSString stringWithUTF8String:message];
+		NSString* sMessage = (message ? [NSString stringWithUTF8String:message]: @"");
 		NSError* sError = [[NSError alloc] initWithDomain:sMessage code:error userInfo:nil];
 		[_delegate didErrorOccured:self error:sError];
 	}
@@ -369,6 +369,16 @@
 	return YES;
 }
 
+- (BOOL)executeAndReset
+{
+	if ([self execute])
+	{
+		[self reset];
+		return YES;
+	}
+	return NO;
+}
+
 - (nullable VNSqliteRecord*)executeForRecord
 {
 	VNSqliteRecord* record = [[VNSqliteRecord alloc] initWithStmt:stmt db:vndb];
@@ -387,7 +397,7 @@
 	{
 		sqlite3_bind_null(stmt, bindIndex);
 	}
-	else if ([val isMemberOfClass:[NSNumber class]])
+	else if ([val isKindOfClass:[NSNumber class]])
 	{
 		NSNumber* number = val;
 		CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
@@ -458,7 +468,7 @@
 				break;
 		}
 	}
-	else if ([val isMemberOfClass:[NSString class]])
+	else if ([val isKindOfClass:[NSString class]])
 	{
 		[bindMembers addObject:val];
 		
@@ -467,7 +477,7 @@
 		
 		sqlite3_bind_text(stmt, bindIndex, cText, (int)strlen(cText), NULL);
 	}
-	else if ([val isMemberOfClass:[NSData class]])
+	else if ([val isKindOfClass:[NSData class]])
 	{
 		[bindMembers addObject:val];
 		
@@ -477,7 +487,7 @@
 		
 		sqlite3_bind_blob(stmt, bindIndex, cData, dataLen, 0);
 	}
-	else if ([val isMemberOfClass:[NSDictionary class]])
+	else if ([val isKindOfClass:[NSDictionary class]])
 	{
 		[bindMembers addObject:val];
 		
