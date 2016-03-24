@@ -18,4 +18,5 @@ Pod::Spec.new do |s|
 
   s.source_files = 'VNSqliteDB/**/*.{h,m,mm}'
   s.public_header_files = 'VNSqliteDB/**/*.h'
+  s.libraries = 'sqlite3'
 end
